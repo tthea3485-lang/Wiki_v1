@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>wiki</title>
+   <script src="https://kit.fontawesome.com/228abf6277.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background-color: #f6f6f6; /* ពណ៌ផ្ទៃក្រោយស្រាលដូច Wiki */
+        }
+        
+
+        /* ១. ប្រើ Container នេះដើម្បីកុំឱ្យជាប់កៀន */
+        .main-container {
+            max-width: 1600px; /* កំណត់ទទឹងអតិបរមា */
+            margin: 0 auto;    /* រុញឱ្យមកនៅកណ្ដាល */
+            padding: 0 20px;   /* ចន្លោះសុវត្ថិភាពសងខាង */
+            background-color: #ffffff;
+        }
+
+        /* ២. រៀបចំ Table Header */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-bottom: none;
+        }
+
+        .header-table td {
+            padding: 10px 0;
+            vertical-align: middle;
+        }
+        .header {
+            background: white;
+            border-bottom: 1px solid #a2a9b1;
+            padding: 10px 20px;
+        }
+
+        /* ស្ទីលសម្រាប់ប្រអប់ Search */
+        .search-container {
+            width: 100%;
+            max-width: 450px;
+            border-collapse: collapse;
+            margin-left: 50px; /* ឱ្យប្រអប់ Search នៅកណ្ដាល */
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #a2a9b1;
+            height: 32px;
+            font-family: sans-serif;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 10px;
+        
+            border-radius: 2px 0 0 2px;
+            outline: none;
+        }
+
+        .search-btn {
+            padding: 8px 15px;
+            background-color: #f8f9fa;
+            
+            border-left: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* ស្ទីលសម្រាប់លីងខាងស្ដាំ */
+        .top-links a {
+            text-decoration: none;
+            color: #0645ad;
+            font-size: 0.85em;
+            margin-left: 15px;
+        }
+
+        .top-links a:hover {
+            text-decoration: underline;
+        }
+ 
+
+        /* រួមបញ្ចូលគ្នាទាំង icon និង input */
+        .search-container i {
+            padding: 0 8px;
+            color: #72777d;
+        }
+
+        .search-input {
+           border: none !important;  /* លុប Border ចេញឱ្យអស់ */
+            outline: none;
+            flex-grow: 1;             /* ឱ្យវាពង្រីកពេញផ្ទៃ */
+            height: 100%;
+            padding: 0 10px;
+        }
+
+        .search-button {
+            border: none !important;
+            border-left: 1px solid #a2a9b1 !important;
+            background: #f8f9fa;
+            height: 100%;
+            padding: 0 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .mw-page-title-main{
+            font-size:1.8em;
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .toc-container {
+            background: white;
+            border: 1px solid #a2a9b1;
+            width: 100%;
+            max-width: 280px;
+            font-size: 14px;
+        }
+        .header {
+            background: white;
+            border-bottom: 1px solid #a2a9b1;
+            padding: 10px 20px;
+            max-width: 280px;
+        }
+
+        .toc-header {
+            background: #eaf3ff;
+            padding: 8px 12px;
+            border-bottom: 1px solid #a2a9b1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toc-title {
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .hide-button {
+            color: #0645ad;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .hide-button:hover {
+            text-decoration: underline;
+        }
+
+        .toc-content {
+            padding: 12px 0;
+        }
+
+        .toc-content.hidden {
+            display: none;
+        }
+
+        .toc-item {
+            list-style: none;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 4px 16px;
+            color: #0645ad;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .toc-link:hover {
+            background: #eaf3ff;
+            text-decoration: underline;
+        }
+
+        .toc-link.top {
+            color: #72777d;
+        }
+        .toc-section > .toc-link {
+            font-weight: normal;
+            color: #000;
+            padding-left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .toc-section.has-subsections > .toc-link {
+            cursor: pointer;
+        }
+
+        .toggle-icon {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            transition: transform 0.2s;
+            font-size: 12px;
+            color: #72777d;
+        }
+
+        .toc-section.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .toc-subsections {
+            list-style: none;
+            margin: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .toc-section.collapsed .toc-subsections {
+            max-height: 0;
+        }
+
+        .toc-section:not(.collapsed) .toc-subsections {
+            max-height: 500px;
+        }
+
+        .toc-subsections .toc-link {
+            padding-left: 36px;
+            font-size: 13px;
+        }
+
+        .toc-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Styling for non-collapsible items */
+        .toc-section.no-subsections > .toc-link {
+            padding-left: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .header-row {
+            background-color: #c5d7f0;
+            padding: 8px;
+            border: 1px solid #a2a9b1;
+        }
+        .header-row td {
+            padding: 8px;
+        }
+        .vte {
+            font-weight: bold;
+            padding-right: 10px;
+        }
+        .title {
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .show-link {
+            float: right;
+            color: #0645ad;
+            text-decoration: none;
+        }
+        .show-link:hover {
+            text-decoration: underline;
+        }
+        .categories-row {
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+        }
+        .categories-label {
+            font-weight: bold;
+        }
+        .category-link {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        .category-link:hover {
+            text-decoration: underline;
+        }
+
+        .search-button:hover { background: #eee; }
+        </style>
+    
+</head>
+<body>
+  
+
+    <nav class="main-container">
+        
+        <table class="header-table">
+            <tr>
+                <td style="width: 200px; white-space: nowrap;">
+                    <span style="font-size: 24px; cursor: pointer; margin-right: 35px; margin-left: 20px;">&#9776;</span>
+                    
+                    <nav style="display: inline-block; vertical-align: middle; line-height: 1.1; margin-left: 5px;">
+                        <span style="font-size: 1.2em; letter-spacing: 1px;">
+                            <img src="wikipedia-wordmark-en-25.svg">
+                        </span><br>
+                        <span style="font-size: 0.65em; color: #555;">25 years of the  Free Encyclopedia</span>
+                      </nav>
+                </td>
+
+                <td>
+                    <div class="search-container">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Search Wikipedia" class="search-input">
+                        <button class="search-button">Search</button>
+                    </div>
+                </td>
+                <td class="top-links" style="width: 270px; ">
+                    <a href="#">Donate</a>
+                    <a href="#">Create account</a>
+                    <a href="#">Log in</a>
+                </td>
+            </tr>
+        </table>
+        <div class="wrapper">
+      <!-- Main Container -->
+      <table  style="width: 100%; border-collapse: collapse">
+        <tr>
+          <!-- Left Sidebar -->
+          <td
+            style="
+              width: 20%;
+              vertical-align: top;
+              padding: 20px;
+              background-color: #f8f9fa;
+            "
+          >
+            <table style="width: 100%; border-collapse: collapse">
+             
+              <!-- Contents -->
+              <tr>
+                <td>
+                  <div style="margin-bottom: 10px">
+                    <span style="font-size: 16px; font-weight: bold"
+                      >Contents</span
+                    >
+                    <button
+                      type="button"
+                      style="
+                        float: right;
+                        font-size: 12px;
+                        background: none;
+                        border: none;
+                        color: #0645ad;
+                        cursor: pointer;
+                      "
+                    >
+                      hide
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <!-- //Contents -->
+              <tr>
+                <td style="font-size: 14px; font-weight: bold; padding: 5px 0">
+                  (Top)
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-top: 5px;">
+                  <a href="#" style="color: #0645ad">History</a>
+                </td>
+              </tr>
+              <!-- Operations -->
+              <tr>
+                <td style="padding-top: 10px">
+                  <details open>
+                    <summary
+                      style="
+                        font-size: 14px;
+                        font-weight: bold;
+                      "
+                    >
+                      Operations
+                    </summary>
+                    <ul
+                      style="
+                        list-style: none;
+                        padding-left: 15px;
+                        margin-top: 5px;
+                      "
+                    >
+                      <li style="padding-top: 5px;">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Financials and ownership</a
+                        >
+                      </li>
+                      <li style="padding-top: 5px;">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Content policies</a
+                        >
+                      </li>
+                      <li style="padding-top: 5px;">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >App</a
+                        >
+                      </li>
+                    </ul>
+                  </details>
+                </td>
+              </tr>
+              <!-- //Operations -->
+              <!-- Site characteristics -->
+              <tr>
+                <td style="padding-top: 10px">
+                  <details open>
+                    <summary
+                      style="
+                        font-size: 14px;
+                        font-weight: bold;
+                        cursor: pointer;
+                      "
+                    >
+                      Site characteristics
+                    </summary>
+                    <ul
+                      style="
+                        list-style: none;
+                        padding-left: 15px;
+                        margin: 5px 0;
+                      "
+                    >
+                      <li style="padding-top: 5px;">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Personals</a
+                        >
+                      </li>
+                      <li style="padding-top: 5px;">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Adult services controversy</a
+                        >
+                      </li>
+                      <li style="padding-top: 5px;">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Flagging</a
+                        >
+                      </li>
+                      <li style="padding-top: 5px;">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Bartering</a
+                        >
+                      </li>
+                    </ul>
+                  </details>
+                </td>
+              </tr>
+              <!-- //Site characteristics -->
+              <tr>
+                <td style="padding: 5px 0">
+                  <a href="#" style="color: #0645ad">Criticism</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <a href="#" style="color: #0645ad">Nonprofit foundation</a>
+                </td>
+              </tr>
+              <!-- In popular culture -->
+              <tr>
+                <td style="padding-top: 10px">
+                  <details open>
+                    <summary
+                      style="
+                        font-size: 14px;
+                        font-weight: bold;
+                        cursor: pointer;
+                      "
+                    >
+                      In popular culture
+                    </summary>
+                    <ul
+                      style="
+                        list-style: none;
+                        padding-left: 15px;
+                        margin: 5px 0;
+                      "
+                    >
+                      <li style="padding: 3px 0">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Films</a
+                        >
+                      </li>
+                      <li style="padding: 3px 0">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Television</a
+                        >
+                      </li>
+                      <li style="padding: 3px 0">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Theatre</a
+                        >
+                      </li>
+                      <li style="padding: 3px 0">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Songs</a
+                        >
+                      </li>
+                      <li style="padding: 3px 0">
+                        <a href="#" style="color: #0645ad; font-size: 13px"
+                          >Media</a
+                        >
+                      </li>
+                    </ul>
+                  </details>
+                </td>
+              </tr>
+              <!-- //In popular culture -->
+              <tr>
+                <td style="padding: 5px 0">
+                  <a href="#" style="color: #0645ad">See also</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <a href="#" style="color: #0645ad">References</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <a href="#" style="color: #0645ad">Further reading</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <a href="#" style="color: #0645ad">External links</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+           <!-- //Left Sidebar -->
+
+          <!-- Middle Content -->
+          <td
+            style="
+              width: 60%;
+              vertical-align: top;
+              padding: 20px;
+              background-color: #ffffff;
+            "
+          >
+            <table style="width: 100%; border-collapse: collapse">
+              
+              <!-- Title -->
+              <tr>
+                <td>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      border-bottom: 1px solid #a2a9b1;
+                      padding-bottom: 10px;
+                    "
+                  >
+                    <h1 style="margin: 0; font-size: 28px; font-weight: normal">
+                      Craigslist
+                    </h1>
+                    <a style="font-size: 14px; color: #0645ad"
+                      ><i class="fa-solid fa-language"></i>30 languages ▼</a
+                    >
+                  </div>
+                </td>
+              </tr>
+              <!-- //Title -->
+              <!-- Article -->
+              <tr>
+                <td>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      border-bottom: 1px solid #a2a9b1;
+                      padding: 10px 0;
+                    "
+                  >
+                    <div>
+                      <span
+                        style="
+                          margin-right: 20px;
+                          font-size: 14px;
+                          border-bottom: 3px solid black;
+                          padding-bottom: 8px;
+                        "
+                        >Article</span
+                      >
+                      <a href="#" style="color: #0645ad">Talk</a>
+                    </div>
+                    <div>
+                      <a
+                        href="#"
+                        style="
+                          border-bottom: 3px solid black;
+                          padding-bottom: 8px;
+                          color: black;
+                          margin-right: 15px;
+                        "
+                        >Read</a
+                      >
+                      <a href="#" style="margin-right: 15px; color: #0645ad"
+                        >Edit</a
+                      >
+                      <a href="#" style="margin-right: 15px; color: #0645ad"
+                        >View history</a
+                      >
+                      <span style="font-size: 14px">Tools ▼</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- //Article -->
+              <!-- Article Info -->
+              <tr>
+                <td style="padding: 10px 0">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                    "
+                  >
+                    <h1
+                      style="
+                        margin: 0;
+                        font-weight: normal;
+                        font-size: 13px;
+                        color: #54595d;
+                      "
+                    >
+                      From Wikipedia, the free encyclopedia
+                    </h1>
+                    <div style="font-size: 12px">
+                      <i class="fa-solid fa-circle-check"></i>
+                      <span>Checked</span>
+                      <i
+                        class="fa-solid fa-lock"
+                        style="padding-left: 10px"
+                      ></i>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Article Info -->
+              <!-- Main Content -->
+              <tr>
+                <td>
+                  <table style="width: 100%; border-collapse: collapse">
+                    <tr>
+                      <td
+                        style="
+                          width: 65%;
+                          vertical-align: top;
+                          padding-right: 20px;
+                          
+                        "
+                      >
+                        <p style="line-height: 1.6; margin: 0 0 15px 0 ; ">
+                          <strong>Craigslist</strong> (stylized as
+                          <strong>craigslist</strong>) is a privately held
+                          American company<sup>[5]</sup> operating a
+                          <a href="#" style="color: #0645ad"
+                            >classified advertisements</a
+                          >
+                          website with sections devoted to jobs, housing, for
+                          sale, items wanted, services,
+                          <a href="#" style="color: #0645ad"
+                            >community service</a
+                          >, <a href="#" style="color: #0645ad">gigs</a>,
+                          <a href="#" style="color: #0645ad">résumés</a>, and
+                          discussion forums.
+                        </p>
+                        <p style="line-height: 1.6; margin: 0 0 15px 0">
+                          <a href="#" style="color: #0645ad">Craig Newmark</a>
+                          began the service in 1995 as an email distribution
+                          list to friends, featuring local events in the
+                          <a href="#" style="color: #0645ad"
+                            >San Francisco Bay Area</a
+                          >. It became a web-based service in 1996 and expanded
+                          into other classified categories. It started expanding
+                          to other U.S. and Canadian cities in 2000. In 2023
+                          Craigslist listed seven hundred cities in 70 countries
+                          on its website and generated 560 million visits per
+                          month.<sup>[6]</sup> Despite such global presence, 90%
+                          of the website's visitors are from the USA.<sup
+                            >[7]</sup
+                          >
+                          Nevertheless, according to
+                          <a href="#" style="color: #0645ad">Alexa</a>,
+                          Craigslist was the 19th most visited website in the
+                          United States in 2022 and #16 in the World in
+                          2023.<sup>[8]</sup>
+                        </p>
+
+                        <!-- History Section -->
+                        <h2
+                          style="
+                            font-size: 20px;
+                            border-bottom: 1px solid #a2a9b1;
+                            padding-bottom: 5px;
+                            margin: 30px 0 15px 0;
+                            font-weight: normal;
+                          "
+                        >
+                          <strong>History</strong>
+                          <span
+                            style="
+                              font-size: 14px;
+                              font-weight: normal;
+                              color: #54595d;
+                              margin-left: 5px;
+                            "
+                          >
+                            [<a href="#" style="color: #0645ad">edit</a>]
+                          </span>
+                        </h2>
+
+                        <!-- Event Description Table (Image + Text) -->
+                        <table
+                          style="
+                            width: 100%;
+                            margin-top: 15px;
+                            border-collapse: collapse;
+                          "
+                        >
+                          <tr>
+                            <td style="width: 200px; vertical-align: top">
+                              <div
+                                style="
+                                  border: 1px solid #c8ccd1;
+                                  background-color: #f8f9fa;
+                                  padding: 3px;
+                                  margin-right: 10px;
+                                  display: inline-block;
+                                "
+                              >
+                                <img
+                                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Craig-newmark.jpg/250px-Craig-newmark.jpg"
+                                  width="200"
+                                  alt="Craig Newmark"
+                                  style="
+                                    display: block;
+                                    border: 1px solid #c8ccd1;
+                                  "
+                                />
+                                <div
+                                  style="
+                                    padding: 3px;
+                                    font-size: 12px;
+                                    line-height: 1.4;
+                                    position: relative;
+                                  "
+                                >
+                                  <a
+                                    href="#"
+                                    style="
+                                      color: #0645ad;
+                                      text-decoration: none;
+                                    "
+                                    >Craig Newmark</a
+                                  >, the founder of Craigslist, in 2006
+                                </div>
+                              </div>
+                            </td>
+
+                            <td style="vertical-align: top; padding-top: 5px">
+                              <p style="line-height: 1.4; margin: 0">
+                                Having observed people helping one another in
+                                friendly, social, and trusting communal ways on
+                                the Internet via
+                                <a
+                                  href="#"
+                                  style="color: #0645ad; text-decoration: none"
+                                  >the WELL</a
+                                >,
+                                <a
+                                  href="#"
+                                  style="color: #0645ad; text-decoration: none"
+                                  >MindVox</a
+                                >
+                                and
+                                <!--<a
+                                  href="#"
+                                  style="color: #0645ad; text-decoration: none"
+                                  >Usenet</a
+                                >, and feeling isolated as a relative newcomer
+                                to San Francisco, Craigslist founder
+                                --<a
+                                  href="#"
+                                  style="color: #0645ad; text-decoration: none"
+                                  >Craig Newmark</a
+                                >
+                                decided to create something similar for local
+                                events.<sup>[9][10]</sup>
+                                In early 1995, he began an email distribution
+                                list to friends. Most of the early postings were
+                                submitted by-->
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">
+                              <a
+                                  href="#"
+                                  style="color: #0645ad; text-decoration: none"
+                                  >Usenet</a>
+                               <a>and feeling isolated as a relative newcomer
+                                to San Francisco, Craigslist founder</a>
+                              <a
+                                  href="#"
+                                  style="color: #0645ad; text-decoration: none"
+                                  >Craig Newmark</a>
+                                <a>
+                                decided to create something similar for local
+                                events.<sup>[9][10]</sup>
+                                In early 1995, he began an email distribution
+                                list to friends. Most of the early postings were
+                                submitted by</a>
+                              <a> Newmark and were notices of social events of
+                              interest to software and Internet developers
+                              living and working in the</a>
+                              <a
+                                href="#"
+                                style="color: #0645ad; text-decoration: none"
+                                >San Francisco Bay Area</a>
+                              >.
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">
+                              <p style="line-height: 1.4">
+                                The number of subscribers and postings grew
+                                rapidly via manual advertising. There was no
+                                moderation and Newmark was surprised when people
+                                started using the mailing list for non-event
+                                postings.[11] People trying to get technical
+                                positions filled found that the list was a 
+                        </table>
+                      </td>
+
+                      <!-- Infobox Column -->
+                      <td style="vertical-align: top; width: 220px;">
+                        <table
+                          style="
+                            border-collapse: collapse;
+                            border: 1px solid #a2a9b1;
+                           background-color: #f8f9fa;
+                          "
+                        >
+                          <tr>
+                            <td
+                              colspan="2"
+                              style="
+                                text-align: center;
+                                font-weight: bold;
+                                font-size: 16px;
+                                padding: 0px;
+                                background-color: #e8ecf0;
+                              "
+                            >
+                              Craigslist Inc.
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colspan="2"
+                              style="text-align: center; padding: 15px"
+                            >
+                              <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Craigslist_logo.svg/250px-Craigslist_logo.svg.png"
+                                alt="Craigslist logo"
+                                width="200"
+                              />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colspan="2"
+                              style="
+                                text-align: center;
+                                font-size: 12px;
+                                color: #54595d;
+                                padding: 5px 10px;
+                              "
+                            >
+                              Logo used since 1995
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colspan="2"
+                              style="text-align: center; padding: 10px"
+                            >
+                              <img
+                                src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Craigslist.png/330px-Craigslist.png"
+                                alt="Screenshot"
+                                style="width: 300px"
+                              />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colspan="2"
+                              style="
+                                text-align: center;
+                                font-size: 12px;
+                                color: #54595d;
+                                padding: 5px 10px;
+                              "
+                            >
+                              Screenshot of the main page on January 28, 2008
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Type of business
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              <a href="#" style="color: #0645ad">Private</a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Type of site
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              <a href="#" style="color: #0645ad">Classifieds</a
+                              >,
+                              <a href="#" style="color: #0645ad">forums</a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Available in
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              English, French, German, Dutch, Spanish, Italian,
+                              Portuguese
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Founded
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              March 1, 1995; 30 years ago (incorporated 1999)
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Headquarters
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              <a href="#" style="color: #0645ad"
+                                >San Francisco</a
+                              >, California, U.S.<sup>[1]</sup>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Area served
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              570 cities in 70 countries
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Founder
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              <a href="#" style="color: #0645ad"
+                                >Craig Newmark</a
+                              >
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Key people
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              <a href="#" style="color: #0645ad"
+                                >Jim Buckmaster</a
+                              >
+                              (CEO)
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Services
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              Web communications
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Revenue
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              US$690M<sup>[citation needed]</sup>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Employees
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              60 (2017)
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              URL
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              <a href="#" style="color: #0645ad"
+                                >www.craigslist.org</a
+                              >
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Advertising
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              None
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Registration
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              Optional<sup>[2]</sup>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Launched
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              1995; 31 years ago
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Current status
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              Active
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-weight: bold;
+                                font-size: 13px;
+                              "
+                            >
+                              Written in
+                            </td>
+                            <td
+                              style="
+                                padding: 8px;
+                                font-size: 13px;
+                              "
+                            >
+                              <a href="#" style="color: #0645ad">Perl</a
+                              ><sup>[4]</sup>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <tr>
+                  <td
+                     
+                     style="vertical-align: top; padding-top: 15px"
+                      >
+                      <p style="line-height: 1.6; margin: 0">
+                         
+                        good way to reach people with the skills they were
+                        looking for. This led to the addition of a jobs
+                        category. User demand for more categories caused
+                        the list of categories to grow. The initial
+                        technology encountered some limits, so by June
+                        1995 Majordomo had been installed, and the
+                        mailing list "Craigslist" resumed operations.
+                        Community members started asking for a web
+                        interface. Newmark registered "craigslist.org",
+                        and the website went live in 1996.[11]
+                        In the fall of 1998, the name "List Foundation"
+                        was introduced, and Craigslist started
+                        transitioning to the use of this name. In April
+                        1999, when Newmark learned of other
+                        organizations called "List Foundation", the use
+                        of this name was dropped. Craigslist was
+                        incorporated as a private for-profit company in
+                        1999.[9] Around the time of these events,
+                        Newmark realized the site was growing so fast
+                        that he could stop working as a software
+                        engineer and devote his full attention to
+                        running Craigslist. By April 2000, nine
+                        employees were working out of Newmark's San
+                       Francisco apartment.[12]
+
+                        In January 2000, current CEO Jim Buckmaster
+                        joined the company as lead programmer and CTO.
+                        Buckmaster contributed to the site's multi-city
+                        architecture, search engine, discussion forums,
+                        flagging system, self-posting process, homepage
+                        design, personals categories, and
+                        best-of-Craigslist feature. He was promoted to
+                        CEO in November 2000.<sup>[13]</sup>
+                       </p>
+                    </td>
+                 </tr>
+
+                 <tr>
+                  <td>
+                    <h2
+                      style="
+                        font-size: 20px;
+                        border-bottom: 1px solid #a2a9b1;
+                        padding-bottom: 5px;
+                        margin: 30px 0 15px 0;
+                        font-weight: normal;
+                        "
+                     >
+                    <strong>Operations</strong>
+                      <span
+                        style="
+                          font-size: 14px;
+                          font-weight: normal;
+                          color: #54595d;
+                          margin-left: 5px;
+                          "
+                          >
+                          [<a href="#" style="color: #0645ad">edit</a>]
+                          </span>
+                        </h2>
+                  </td>
+                 </tr>
+                 <!-- warning part -->
+                  
+                 <tr>
+                  <td>
+                    <table style="width: 100%; border: 1px solid #a2a9b1; border-left: 5px solid #f28c28; background: #fef6e7; margin: 20px 0; border-collapse: collapse;">
+                        <tr>
+                            <td style="width: 50px; text-align: center; vertical-align: top; padding: 15px 10px;">
+                                <span style="background: #f28c28; color: white; width: 35px; height: 35px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold;">!</span>
+                            </td>
+                             <td style="padding: 15px;">
+                                <p style="margin: 0 0 10px 0;"><b>This section has multiple issues.</b> Please help <a href="#" style="color: #3366cc; text-decoration: none;">improve it</a> or discuss these issues on the <a href="#" style="color: #3366cc; text-decoration: none;">talk page</a>. <i><a href="#" style="color: #3366cc; text-decoration: none;">(Learn how and when to remove these messages)</a></i></p>
+                                <ul style="margin: 10px 0; padding-left: 20px;">
+                                    <li>This section needs to be <b>updated</b>. <i>(June 2024)</i></li>
+                                    <li>The <a href="#" style="color: #3366cc; text-decoration: none;">neutrality</a> of this section is <a href="#" style="color: #3366cc; text-decoration: none;">disputed</a>. <i>(June 2024)</i></li>
+                                </ul>
+                             </td>
+                            
+                        </tr>
+                    </table>
+                  </td>
+                 </tr>
+                  <td>
+                    <table>
+                      <tr>
+                        <td style="vertical-align: top; padding-top: 5px">
+                              <p style="line-height: 1.5; margin: 0">
+                                Currently, the site experiences 142.7M global monthly visitors, 
+                                as well as 339k global monthly app downloads.[17] In terms of global rank for internet traffic,
+                                Craigslist sits at #106.[18] The majority of users are between the age of 45 and 54, and are from the United States.[19]
+                              </p>
+                              <p style="line-height: 1.5;">
+                                Back in 2009, the site received more than 2 million new job listings each month, making it one of the top job 
+                                boards in the world.[20][21] The 23 largest U.S. cities listed on the Craigslist home page collectively receive more than
+                                 300,000 postings per day just in the "for sale" and "housing" sections as of October 2011.[22] 
+                                The classified advertisements range from traditional buy/sell ads and community announcements to personal ads.
+                              </p>
+                              <p style="line-height: 1.5;">
+                               In 2009, Craigslist operated with a staff of 28 people.[23] By 2019 this number grew to 50 people. In that year alone 
+                               the company made more than $1 billion in revenue,
+                                while charging only ca.5 US$ for most ads (the exact price depends on the type of ad and service/property location).[24][25]
+                              </p>
+                              <p style="line-height: 1.5;">
+                               Since around 2018, Craigslist has experienced a steady decline in traffic and revenue, with a reported revenue of
+                                $302 million in 2025, down from $1.04 billion in 2018. Some analysts have attributed
+                                this decline to increased competition from similar services such as Facebook Marketplace, OfferUp, and Mercari.[26]
+                              </p>
+                          </td>
+                        <td style="width: 220px; vertical-align: top">
+                              <div
+                                style="
+                                  border: 1px solid #c8ccd1;
+                                  background-color: #f8f9fa;
+                                  padding: 3px;
+                                  margin-right: 15px;
+                                  display: inline-block;
+                                "
+                              >
+                                <img
+                                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Craigslist01.jpg/250px-Craigslist01.jpg"
+                                  width="250"
+                                  alt="Craig Newmark"
+                                  style="
+                                    display: block;
+                                    border: 1px solid #c8ccd1;
+                                  "
+                                />
+                                <div
+                                  style="
+                                    padding: 3px;
+                                    font-size: 12px;
+                                    line-height: 1.4;
+                                    position: relative;
+                                  "
+                                >
+                                  <a
+                                    href="#"
+                                    style="
+                                      color: #0645ad;
+                                      text-decoration: none;
+                                    "
+                                    >Craig Newmark</a
+                                  >, the founder of Craigslist, in 2006
+                                </div>
+                              </div>
+                            </td>
+                            
+                          
+                      </tr>
+                    </table>
+                  </td>
+                  <tr>
+                          <!-- Financials and ownership -->
+                      <td>
+                        <h2
+                         style="
+                            font-size: 20px;
+                            font-weight: normal;
+                            "
+                            >
+                          <strong>Financials and ownership</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                        </h2>
+                      </td>
+                        </tr>
+                          <!--\\ Financials and ownership -->
+                        <tr>
+                      <td style="vertical-align: top; padding-top: 5px" colspan="2">
+                        <p style="line-height: 1.5; margin: 0;">
+                         In December 2006, at the UBS Global Media Conference in New York, Craigslist CEO
+                          Jim Buckmaster told Wall Street analysts that Craigslist had little interest
+                          in maximizing profit, and instead preferred to help users find cars, apartments, jobs and dates.[27][28]
+                        </p>
+                        <p style="line-height: 1.5;">
+                         Craigslist's main source of revenue is paid job ads in select American cities. The company does not formally disclose financial 
+                         or ownership information. Analysts and commentators have reported varying figures for its annual revenue, ranging from $10 million in 
+                         2004, $20 million in 2005, and $25 million in 2006 to possibly $150 million in 2007.[29][30][31] Fortune has described their revenue model as 
+                         "quasi-socialist", citing their focus on features for users regardless of profitability. 
+                         Eric Baker of StubHub has described the site as a "potential gold mine of revenue if only it would abandon its communist manifesto."[29]
+                        </p>
+                      </td>
+                   </tr>
+                    <!-- Content policies -->
+                   <tr>
+                      <td>
+                        <h2
+                         style="
+                            font-size: 20px;
+                            font-weight: normal;
+                            "
+                            >
+                          <strong>Content policies</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                          
+                        <tr>
+                          <td style="vertical-align: top; padding-top: 5px">
+                            <p  style="line-height: 1.5; margin: 0;">
+                              As of 2012, mashup sites such as padmapper.com and housingmaps.com were overlaying Craigslist data with Google
+                              Maps and adding their own search filters to improve usability. In June 2012, Craigslist changed its terms of
+                              service to disallow the practice. In July 2012, Craigslist filed a lawsuit against padmapper.com.[39] Following the shutdown 
+                              of Padmapper.com, some users complained that the service was useful to them and therefore should have remained intact.[40]
+                            </p>
+                          </td>
+                        </tr>
+                        <!--\\ Content policies -->
+                        <!-- App -->
+                        <tr>
+                            <td>
+                              <h2
+                              style="
+                                  font-size: 20px;
+                                  font-weight: normal;
+                                  "
+                                  >
+                                <strong>App</strong>
+                                  <span
+                                    style="
+                                      font-size: 14px;
+                                      font-weight: normal;
+                                      color: #54595d;
+                                      margin-left: 5px;
+                                      "
+                                  >
+                                    [<a href="#" style="color: #0645ad">edit</a>]
+                                  </span>
+                                  </h2>
+                                </td>
+                        </tr>
+                        <tr>
+                          <td style="vertical-align: top; padding-top: 5px">
+                            <p  style="line-height: 1.5; margin: 0;">
+                             In December 2019, Craigslist introduced a platform for iOS and a beta version on Android.[41]
+                            </p>
+                          </td>
+                        </tr>
+                                <!--\\App -->
+                         <!-- Site characteristics -->
+                   <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          border-bottom: 1px solid #a2a9b1;
+                          padding-bottom: 5px;
+                          margin: 30px 0 15px 0;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Site characteristics</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                          
+                        <tr>
+                          <td style="vertical-align: top; padding-top: 5px">
+                            <p  style="line-height: 1.5; margin: 0;">
+                             Craigslist is famous for its repeated refusal to update its website appearance.
+                             In 2025 it still features a 1995 "barebones" design, which became its most recognizable feature.[42]
+                            </p>
+                          </td>
+                        </tr>
+                        <!--\\ Site characteristics -->
+                         <!--Personals -->
+                        <tr>
+                            <td>
+                              <h2
+                              style="
+                                  font-size: 20px;
+                                  font-weight: normal;
+                                  "
+                                  >
+                                <strong>Personals</strong>
+                                  <span
+                                    style="
+                                      font-size: 14px;
+                                      font-weight: normal;
+                                      color: #54595d;
+                                      margin-left: 5px;
+                                      "
+                                  >
+                                    [<a href="#" style="color: #0645ad">edit</a>]
+                                  </span>
+                                  </h2>
+                                </td>
+                        </tr>
+                        <tr>
+                          <td style="vertical-align: top; padding-top: 5px">
+                            <p  style="line-height: 1.5; margin: 0;">
+                            Over the years Craigslist had become a very popular online destination for arranging for dates and sex.[43][44][45][46][47] The personals section
+                            allows for postings that are for "strictly platonic", "dating/romance", and "casual encounters".[43][44][46][47]
+                            </p>
+                            <p  style="line-height: 1.5;">
+                            The site was considered particularly useful by lesbians and gay men seeking to make connections, because of the service's free 
+                            and open nature and because of the difficulty of otherwise finding each other in more conservative areas.[48]
+                            </p >
+                            <p style="line-height: 1.5;">In 2005, San Francisco Craigslist's men seeking men section was attributed to facilitating sexual encounters and was the
+                               second most common correlation to syphilis infections.[48] The company has been pressured by San Francisco Department of 
+                               Public Health officials, prompting Jim Buckmaster to state that the site has a very small staff and that the public "must
+                                police themselves".[48] The site has, however, added links to San Francisco City Clinic and STD forums.[48]</p>
+                          </td>
+                        </tr>
+                            
+                      <td>
+                    <table>
+                      <tr>
+                        <td style="vertical-align: top; padding-top: 5px">
+                              <p style="line-height: 1.5; margin: 0">
+                                Advertisements for "adult" (previously "erotic") services were initially given special treatment, then closed entirely on September 4, 2010, following a 
+                                controversy over claims by state attorneys general that the advertisements promoted prostitution.[50][51]
+                              </p>
+                              <p style="line-height: 1.5;">
+                               In 2002, a disclaimer was put on the "men seeking men", "casual encounters", "erotic services", and "rants and raves" boards 
+                               to ensure that those who clicked on these sections were over the age of 18, but no disclaimer was put on the "men seeking women",
+                                "women seeking men" or "women seeking women" boards. As a response to charges of sex discrimination and negative stereotyping, 
+                                Buckmaster explained that the company's policy is a response to user feedback requesting the warning on the more sexually explicit
+                                 sections, including "men seeking men".[52]
+                              </p>
+                              
+                              
+                          </td>
+                        <td style="width: 220px; vertical-align: top">
+                              <div
+                                style="
+                                  border: 1px solid #c8ccd1;
+                                  background-color: #f8f9fa;
+                                  padding: 3px;
+                                  margin-right: 15px;
+                                  display: inline-block;
+                                "
+                              >
+                                <img
+                                  src="https://upload.wikimedia.org/wikipedia/en/thumb/9/97/Craiglistcensorsadultservices.png/250px-Craiglistcensorsadultservices.png"
+                                  width="300"
+                                  alt="Craig Newmark"
+                                  style="
+                                    display: block;
+                                    border: 1px solid #c8ccd1;
+                                  "
+                                />
+                                <div
+                                  style="
+                                    padding: 3px;
+                                    font-size: 12px;
+                                    line-height: 1.4;
+                                    position: relative;
+                                  "
+                                >
+                                  <a
+                                    href="#"
+                                    style="
+                                      color: #0645ad;
+                                      text-decoration: none;
+                                    "
+                                    >Craig Newmark</a
+                                  >, the founder of Craigslist, in 2006
+                                </div>
+                              </div>
+                            </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <tr>
+                    <td>
+                      <p style="line-height: 1.5; margin: 0;">
+                              On May 13, 2009, Craigslist announced that it would close the erotic services section, replacing it with an adult services section to
+                              be reviewed by Craigslist employees. This decision came after allegations by several U.S. states that the erotic services ads were being
+                              used for prostitution.[53]
+                      </p>
+                    </td>
+                  </tr>
+                      <!--\\Adult services controversy -->
+                        <!-- Flagging -->
+                   <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Flagging</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                          
+                        <tr>
+                          <td style="vertical-align: top; padding-top: 5px">
+                            <p  style="line-height: 1.5; margin: 0;">
+                             Craigslist has a user flagging system to report illegal and inappropriate postings.
+                            </p>
+                            <p  style="line-height: 1.5;">
+                              Flagging does not require account login or registration, and can be done anonymously
+                              by anyone.[72] Postings are subject to automated removal when a certain number of users
+                              flag them. The number of flags required for a posting's removal is dynamically variable
+                              and remains unknown to all but Craigslist staff.[72] Some users allege that flagging may
+                              also occur as acts of vandalism by groups of individuals at different ISPs, but no evidence 
+                              of this has ever been shown. Flagging can also alert Craigslist staff to blocks of ads requiring
+                              manual oversight or removal.[72][better source needed][73]
+                            </p>
+                            <p>Flagging is also done by Craigslist itself (Craigslist's automated systems) and the posts will never appear on the search results.[74]</p>
+                          </td>
+                        </tr>
+                        <!--\\ Flagging -->
+                              <!-- Bartering -->
+                   <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Bartering</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                          
+                        <tr>
+                          <td style="vertical-align: top; padding-top: 5px">
+                            <p  style="line-height: 1.5; margin: 0;">
+                            Craigslist includes a barter option in its "for sale" section. This growing trade economy has
+                             been documented on the television program Barter Kings and the blog one red paperclip.[75][76]
+                            </p>
+                          </td>
+                        </tr>
+                        <!--\\ Bartering -->
+                        <!-- Criticism -->
+                   <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          border-bottom: 1px solid #a2a9b1;
+                          padding-bottom: 5px;
+                          margin: 30px 0 15px 0;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Criticism</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                          
+                        <tr>
+                          <td style="vertical-align: top; padding-top: 5px">
+                            <p  style="line-height: 1.5; margin: 0;">
+                              From its earliest days Craigslist faced criticism for allowing illegal/unethical activities and for poor 
+                              protection of buyers and sellers. Some well-recognized types of illegal activities comprise: counterfeit 
+                              goods, advanced fee fraud and buyer-seller collusion.[77] In "counterfeit goods" scam, the seller uses a 
+                              marketplace to sell illegal or counterfeit products, while misrepresenting them as legitimate goods. In "
+                              advanced fee fraud" the seller tricks the buyer's into making an unsecured (i.e. not via a credit card or another 
+                              legitimate escrow service) payment before receiving the product/service.[78] In "buyer-seller collusion" a fraudulent
+                              buyer uses the victim's payment information (such as a credit card number) to buy fake goods from a colluding fake
+                              seller, thus getting the money from the victim and evading the traditional credit card safeguard practices.
+                            </p>
+                            <p style="line-height: 1.5;">In its defense Craigslist successfully used Section 230 of the US Communications Decency Act (CDA), which states that websites cannot be held liable for the actions of their users. Craigslist also successfully challenged a 2017 FOSTA amendment to the CDA, which created an exception allowing legal actions against a platform, if its users violate federal sex-trafficking laws (see Dart v. Craigslist, Inc.).</p>
+                          </td>
+                        </tr>
+                        <!--\\ Criticism -->
+                          <!-- Nonprofit foundation -->
+                   <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          border-bottom: 1px solid #a2a9b1;
+                          padding-bottom: 5px;
+                          margin: 30px 0 15px 0;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Nonprofit foundation</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                          
+                        <tr>
+                          <td style="vertical-align: top; padding-top: 5px">
+                            <p  style="line-height: 1.5; margin: 0;">
+                              In 2001, the company started the Craigslist Foundation,[84] a § 501(c)(3) nonprofit organization that offered free and low-cost events and online resources to promote community building at all levels. It accepted charitable donations, and rather than directly funding organizations, it produced "face-to-face events and offers online resources to help grassroots organizations get off the ground and contribute real value to the community".
+                            </p>
+                            <p style="line-height: 1.5;">In 2012, the Craigslist Foundation closed, with charity work moving to support other charitable funds.[85]</p>
+                          </td>
+                        </tr>
+                        <!--\\ Nonprofit foundation -->
+                        <!-- In popular culture -->
+                   <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          border-bottom: 1px solid #a2a9b1;
+                          padding-bottom: 5px;
+                          margin: 30px 0 15px 0;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>In popular culture</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                        
+                          <!-- Films -->
+                       <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Films</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                         <tr>
+                          <td style="vertical-align: top; padding: 0px 20px 0px 20px;">
+                            <li>
+                               <p style="line-height: 1.5; margin: 0; ">
+                               24 Hours on Craigslist (2005), an American feature-length documentary that captures the
+                               people and stories behind a single day's posts on Craigslist</p>
+                            </li>
+                           <li>
+                               <p style="line-height: 1.5;">
+                               Due Date shows one of the lead characters, Ethan (Zach Galifianakis), buying marijuana from a dealer through the site.</p>
+                            </li>
+                             <li>
+                               <p style="line-height: 1.5;">
+                               The Craigslist Killer (January 3, 2011),[86] a Lifetime made-for-TV movie featuring the story of Philip Markoff, who was
+                                accused of robbing and/or murdering several prostitutes he met through Craigslist's adult services section.</p>
+                            </li>
+                          </td>
+                          
+                        </tr>
+                        <!-- \\Films -->
+                          <!-- Television -->
+                       <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Television</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                         <tr>
+                          <td style="vertical-align: top; padding: 0px 20px 0px 20px;">
+                            <li>
+                               <p style="line-height: 1.5; margin: 0; ">
+                              The American comedy series Bored to Death revolves around a fictional Jonathan Ames (played by Jason Schwartzman) who posts an ad on Craigslist advertising himself as an unlicensed private detective.[89]</p>
+                            </li>
+                           <li>
+                               <p style="line-height: 1.5;">
+                              The premise of the sitcom New Girl centers around a girl (Zooey Deschanel) who looks on Craigslist to find new roommates. She misunderstands one of the listings and ends up moving in with three men when she had intended to find female roommates.[90]</p>
+                            </li>
+                             <li>
+                               <p style="line-height: 1.5;">
+                              The American television mockumentary comedy sitcom Modern Family in the 10th episode of the third season "Express Christmas" mentions Craigslist when Phil Dunphy played by Ty Burrell buys a signed Joe Dimaggio card for his father-in-law Jay played by Ed ONeill.[91]</p>
+                            </li>
+                          </td>
+                          
+                        </tr>
+                        <!-- \\Television -->
+                          <!-- Theatre -->
+                       <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Theatre</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                         <tr>
+                          <td style="vertical-align: top; padding: 0px 20px 0px 20px;">
+                            <li>
+                               <p style="line-height: 1.5; margin: 0; ">
+                              In November 2007, Ryan J. Davis directed Jeffery Self's solo show My Life on the Craigslist
+                               at off-Broadway's New World Stages.[92] The show focuses on a young man's sexual experiences 
+                               on Craigslist and was so successful that it returned to New York by popular demand in February 2008.[93]</p>
+                            </li>
+                          </td>
+                        </tr>
+                        <!-- \\Theatre -->
+                         <!--Songs -->
+                       <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Songs</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                         <tr>
+                          <td style="vertical-align: top; padding: 0px 20px 0px 20px;">
+                            <li>
+                              <p style="line-height: 1.5; margin: 0; ">
+                               In June 2009, "Weird Al" Yankovic released a song entitled "Craigslist", which parodied the types of ads one
+                               might see on the site. The song was a style parody of The Doors and featured Doors member Ray Manzarek on the keyboards.</p>
+                            </li>
+                            <li>
+                              <p style="line-height: 1.5; ">
+                               In 2006, composer Gabriel Kahane released an album of his satirical art songs for voice and piano, entitled Craigslistlieder,
+                                using excerpts from real Craigslist ads as text.[94]</p>
+                            </li>
+                          </td>
+                        </tr>
+                        <!-- \\Songs -->
+                         <!--Media -->
+                       <tr>
+                      <td>
+                        <h2
+                         style="
+                          font-size: 20px;
+                          font-weight: normal;
+                        "
+                            >
+                          <strong>Media</strong>
+                            <span
+                              style="
+                                font-size: 14px;
+                                font-weight: normal;
+                                color: #54595d;
+                                margin-left: 5px;
+                                "
+                            >
+                              [<a href="#" style="color: #0645ad">edit</a>]
+                            </span>
+                            </h2>
+                          </td>
+                        </tr>
+                         <tr>
+                          <td style="vertical-align: top; padding: 0px 20px 0px 20px;">
+                            <li>
+                              <p style="line-height: 1.5; margin: 0; ">
+                               Craigslist received attention in the media in 2011 and 2014 when it was reported that convicted murderers had
+                               used the platform to lure their victims.[95][96]</p>
+                            </li>
+                            <li>
+                              <p style="line-height: 1.5; ">
+                               The site has been described by Martin Sorrell as "socialistic anarchist".[97]</p>
+                            </li>
+                          </td>
+                        </tr>
+                        <!-- \\Media -->
+                        <!--\\ In popular culture -->
+
+                        <!-- See also -->
+                        <tr>
+                            <td>
+                              <h2
+                              style="
+                                font-size: 20px;
+                                border-bottom: 1px solid #a2a9b1;
+                                padding-bottom: 5px;
+                                margin: 30px 0 15px 0;
+                                font-weight: normal;
+                              "
+                                  >
+                              <strong>See also</strong>
+                                <span
+                                  style="
+                                    font-size: 14px;
+                                    font-weight: normal;
+                                    color: #54595d;
+                                    margin-left: 5px;
+                                    "
+                                >
+                                  [<a href="#" style="color: #0645ad">edit</a>]
+                                </span>
+                                </h2>
+                              </td>
+                          </tr>
+                          <tr>
+                          <td style="vertical-align: top; padding: 0px 20px 0px 20px;">
+                            <li>
+                              <a href="#">List of online marketplaces</a>
+                            </li>
+                            
+                          </td>
+                        </tr>
+                          <!-- \\See also -->
+
+                        <!--References -->
+                        <tr>
+                            <td>
+                              <h2
+                              style="
+                                font-size: 20px;
+                                border-bottom: 1px solid #a2a9b1;
+                                padding-bottom: 5px;
+                                margin: 30px 0 15px 0;
+                                font-weight: normal;
+                              "
+                                  >
+                              <strong>References</strong>
+                                <span
+                                  style="
+                                    font-size: 14px;
+                                    font-weight: normal;
+                                    color: #54595d;
+                                    margin-left: 5px;
+                                    "
+                                >
+                                  [<a href="#" style="color: #0645ad">edit</a>]
+                                </span>
+                                </h2>
+                            </td>
+                        </tr>
+                        <td>
+                          <table>
+                            <tr>
+                              <td style="width: 50%; vertical-align: top;">
+                                <ol>
+                                  <li>craigslist – Company Overview". Hoover's. Archived from the original on January 12, 2015. Retrieved May 8, 2008.</li>
+                                  <li style="padding-top: 20px;">Yltaevae, L. (November 30, 2022). "Annual revenue of classified website Craigslist from 2018 to 2021". statista. Archived from the original on April 1, 2023. Retrieved April 1, 2023.</li>
+                                </ol>
+                              </td>
+                              <td>
+                               <p>
+                                 51.Miller, Claire Cain (September 4, 2010). "Craigslist Blocks Access to 'Adult Services' Pages". The New York Times.
+                                  Archived from the original on May 20, 2013. Retrieved September 4, 2010.
+                               </p>
+                               <p>
+                                 52.Miller, Claire Cain (September 4, 2010). "Craigslist Blocks Access to 'Adult Services' Pages". The New York Times.
+                                  Archived from the original on May 20, 2013. Retrieved September 4, 2010.
+                               </p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                          <!-- \\References -->
+                          <!--Further reading -->
+                           <tr>
+                            <td>
+                              <h2
+                              style="
+                                font-size: 20px;
+                                border-bottom: 1px solid #a2a9b1;
+                                padding-bottom: 5px;
+                                margin: 30px 0 15px 0;
+                                font-weight: normal;
+                              "
+                                  >
+                              <strong>Further reading</strong>
+                                <span
+                                  style="
+                                    font-size: 14px;
+                                    font-weight: normal;
+                                    color: #54595d;
+                                    margin-left: 5px;
+                                    "
+                                >
+                                  [<a href="#" style="color: #0645ad">edit</a>]
+                                </span>
+                                </h2>
+                              </td>
+                        </tr>
+                        <tr>
+                          <td style="vertical-align: top; padding: 0px 20px 0px 20px;">
+                            <li>
+                              <p style="line-height: 1.5; margin: 0; ">
+                               Gale Directory of Company Histories, "craigslist" (2007)</p>
+                            </li>
+                            <li>
+                              <p style="line-height: 1.5; ">
+                               Newman, Lily Hay (January 30, 2015). "Police Stations Increasingly Offer Safe Haven for Craigslist Transactions". Slate</p>
+                            </li>
+                            <li>
+                              <p style="line-height: 1.5; ">
+                              Wolf, Gary (August 24, 2009). "Why Craigslist Is Such a Mess". Wired. Archived from the original on August 27, 2009.</p>
+                            </li>
+                          </td>
+                        </tr>
+                        
+                          <tr>
+                            <td>
+                              <h2
+                              style="
+                                font-size: 20px;
+                                border-bottom: 1px solid #a2a9b1;
+                                padding-bottom: 5px;
+                                margin: 30px 0 15px 0;
+                                font-weight: normal;
+                               "
+                                  >
+                               <strong>External links</strong>
+                                <span
+                                  style="
+                                    font-size: 14px;
+                                    font-weight: normal;
+                                    color: #54595d;
+                                    margin-left: 5px;
+                                    "
+                                >
+                                  [<a href="#" style="color: #0645ad">edit</a>]
+                                </span>
+                                </h2>
+                            </td>
+                        </tr>
+                        <td>
+                          <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                              <td style="vertical-align: top; padding: 0px;">
+                                <ul style="margin: 0; padding-left: 20px;">
+                                  <li><a href="#">Official website</a></li>
+                                  <li><a href="#">Company blog</a></li>
+                                  <li><a href="#">Craigslist Foundation</a></li>
+                                </ul>
+                              </td>
+
+                              <td style="text-align: right;">
+                                <div style="display: inline-flex; 
+                                            text-align: left; 
+                                            border: 1px solid #a2a9b1; 
+                                            background-color: #f8f9fa; 
+                                            padding: 8px 12px;
+                                           ">
+                                  <div style="margin-right: 12px;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Commons-logo.svg" alt="Commons Logo" width="30">
+                                  </div>
+                                  <div style="width: 140px; font-size: 12px; line-height: 1.3;">
+                                    Wikimedia Commons has media related to 
+                                    <a href="#" style="font-weight: bold; font-style: italic; color: #0645ad;">Craigslist</a>.
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                       
+                        <!--  \\External links-->
+                      </td>
+                 <!-- //Main Content -->
+            </table>
+            <table>
+    <tr class="header-row">
+        <td>
+            <span class="vte">V · T · E</span>
+            <span class="title">Sharing economy</span>
+            <a href="#" class="show-link">[show]</a>
+        </td>
+    </tr>
+    <tr class="header-row">
+        <td>
+            <span class="title">Authority control databases</span>
+            <a href="#" class="show-link">[show]</a>
+        </td>
+    </tr>
+</table>
+
+<div class="categories-row">
+    <span class="categories-label">Categories:</span>
+    <a href="#" class="category-link">Craigslist</a> |
+    <a href="#" class="category-link">1995 establishments in California</a> |
+    <a href="#" class="category-link">2004 mergers and acquisitions</a> |
+    <a href="#" class="category-link">American companies established in 1995</a> |
+    <a href="#" class="category-link">Classified advertising websites</a> |
+    <a href="#" class="category-link">Internet forums</a> |
+    <a href="#" class="category-link">Internet properties established in 1995</a> |
+    <a href="#" class="category-link">Marketing companies established in 1995</a> |
+    <a href="#" class="category-link">Online marketplaces of the United States</a> |
+    <a href="#" class="category-link">Retail companies established in 1995</a> |
+    <a href="#" class="category-link">Privately held companies based in San Francisco</a>
+</div>
+          </td>
+         <!-- //Middle Content -->
+
+          <!-- Right Sidebar -->
+          <td
+            style="
+              width: 20%;
+              vertical-align: top;
+              padding: 20px;
+              background-color: #f8f9fa;
+            "
+          >
+          <!-- sidebar -->
+            <table style="width: 100%; border-collapse: collapse">
+              <tr>
+                <td>
+                  <h1 style="margin-bottom: 10px; font-size: 14px">
+                    Appearance
+                    <button
+                      type="button"
+                      style="
+                        font-size: 11px;
+                        background: none;
+                        border: none;
+                        color: #0645ad;
+                        cursor: pointer;
+                        float: right;
+                      "
+                    >
+                      hide
+                    </button>
+                  </h1>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    border-bottom: 1px solid #a2a9b1;
+                    padding-bottom: 10px;
+                    font-weight: bold;
+                    font-size: 13px;
+                  "
+                >
+                  Text
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <label style="display: block; font-size: 13px"
+                    ><input type="radio" name="text-size" /> Small</label
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <label style="display: block; font-size: 13px"
+                    ><input type="radio" name="text-size" checked />
+                    Standard</label
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <label style="display: block; font-size: 13px"
+                    ><input type="radio" name="text-size" /> Large</label
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    border-bottom: 1px solid #a2a9b1;
+                    padding: 10px 0;
+                    font-weight: bold;
+                    font-size: 13px;
+                  "
+                >
+                  Width
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <label style="display: block; font-size: 13px"
+                    ><input type="radio" name="width" checked /> Standard</label
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <label style="display: block; font-size: 13px"
+                    ><input type="radio" name="width" /> Wide</label
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    border-bottom: 1px solid #a2a9b1;
+                    padding: 10px 0;
+                    font-weight: bold;
+                    font-size: 13px;
+                  "
+                >
+                  Color (beta)
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <label style="display: block; font-size: 13px"
+                    ><input type="radio" name="color" /> Automatic</label
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <label style="display: block; font-size: 13px"
+                    ><input type="radio" name="color" checked /> Light</label
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 5px 0">
+                  <label style="display: block; font-size: 13px"
+                    ><input type="radio" name="color" /> Dark</label
+                  >
+                </td>
+              </tr>
+              
+            </table>
+          </td>
+        </tr>
+       
+      </table>
+      <!-- //Main Container -->
+    </div>
+  </nav>
+</body>
